@@ -15,7 +15,6 @@ inputs para o smart contract:
 }
 
 payload pode ter o seguinte json:
-
 {
  "attachments":
   [{
@@ -31,13 +30,11 @@ payload pode ter o seguinte json:
    "tags": ["horta", "cultura"]
 }
 
-
 Numa versão V2
 
 Pode-se adicionar no payload do email ou fora.
 
 "cc_accounts": ["rmrasdasay0@histaasdts.com", "xpto@active.com"], 
-
 
 "bcc_accounts": ["asdasgo@test.net", "pogaew@google.blockchain"],
 
