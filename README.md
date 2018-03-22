@@ -6,6 +6,7 @@ Permite emails privados ou publicos com attachments privados ou publicos.
 
 inputs para o smart contract:
 
+```
 {
   "src_account": "rmumbray0@histats.com",
   "dest_account": "dmcpheat0@wordpress.com",
@@ -13,8 +14,10 @@ inputs para o smart contract:
   "isEncripted": true,
   "payload": "a1bfa98cda2b42fe2b7ad9ba8b825dc680a781ee" // Hash to IPFS content
 }
+```
 
 payload pode ter o seguinte json:
+```
 {
  "attachments":
   [{
@@ -29,14 +32,14 @@ payload pode ter o seguinte json:
    "body": "As batatas da horta já estão prontas para colher",
    "tags": ["horta", "cultura"]
 }
-
+```
 Numa versão V2
 
 Pode-se adicionar no payload do email ou fora.
-
+```
 "cc_accounts": ["rmrasdasay0@histaasdts.com", "xpto@active.com"],
-
 "bcc_accounts": ["asdasgo@test.net", "pogaew@google.blockchain"],
+```
 
 No EOS 1 transacao pode receber N mensagens.
 Tem de se ver como se obtem os dados do smart contract
