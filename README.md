@@ -34,7 +34,7 @@ Numa versão V2
 
 Pode-se adicionar no payload do email ou fora.
 
-"cc_accounts": ["rmrasdasay0@histaasdts.com", "xpto@active.com"], 
+"cc_accounts": ["rmrasdasay0@histaasdts.com", "xpto@active.com"],
 
 "bcc_accounts": ["asdasgo@test.net", "pogaew@google.blockchain"],
 
