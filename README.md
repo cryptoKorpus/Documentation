@@ -6,12 +6,12 @@ Permite emails privados ou publicos com attachments privados ou publicos.
 
 inputs para o smart contract:
 
-{ 
-  "src_account": "rmumbray0@histats.com", 
-  "dest_account": "dmcpheat0@wordpress.com", 
+{
+  "src_account": "rmumbray0@histats.com",
+  "dest_account": "dmcpheat0@wordpress.com",
   "date": "2018-03-15T05:00Z",
   "isEncripted": true,
-  "payload": "a1bfa98cda2b42fe2b7ad9ba8b825dc680a781ee" // Hash to IPFS content 
+  "payload": "a1bfa98cda2b42fe2b7ad9ba8b825dc680a781ee" // Hash to IPFS content
 }
 
 payload pode ter o seguinte json:
