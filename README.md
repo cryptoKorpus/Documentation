@@ -2,6 +2,8 @@
 
 b-mail smartcontract model
 
+TESTE
+
 Permite emails privados ou publicos com attachments privados ou publicos.
 
 inputs para o smart contract:
