@@ -2,11 +2,9 @@
 
 b-mail smartcontract model
 
-TESTE
-
-Permite emails privados ou publicos com attachments privados ou publicos.
-
-inputs para o smart contract:
+Enable mail system that allows sending private mails using EOS smart contract
+ 
+inputs for smart contract:
 
 ```
 {
@@ -18,7 +16,7 @@ inputs para o smart contract:
 }
 ```
 
-payload pode ter o seguinte json:
+payload can have the following json:
 ```
 {
  "attachments":
@@ -35,13 +33,14 @@ payload pode ter o seguinte json:
    "tags": ["horta", "cultura"]
 }
 ```
-Numa versão V2
+For V2 version
 
-Pode-se adicionar no payload do email ou fora.
+Can add on the mail payload or outside
+
 ```
 "cc_accounts": ["rmrasdasay0@histaasdts.com", "xpto@active.com"],
 "bcc_accounts": ["asdasgo@test.net", "pogaew@google.blockchain"],
 ```
 
-No EOS 1 transacao pode receber N mensagens.
-Tem de se ver como se obtem os dados do smart contract
+In EOS 1 transaction can receive N messages.
+Need to check how to get data from the smart contract, multindex?
