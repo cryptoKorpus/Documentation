@@ -4,7 +4,7 @@ possible alice or Bob to disclose with the inverse pair of private and public.
 ECC-based keys (elliptic curve) have the property of generating the public through the private but obviously not the opposite. ???
 So it WORKS !!
 
-´´´
+```
 function testPrivateMessageSend(text) {
 
   console.log(text);
@@ -36,4 +36,4 @@ console.log("alice decrypt: " + decriptedAlice.toString());
 console.log("bob decrypt: " + decriptedBob.toString());
 });
 }
-´´´
+```
