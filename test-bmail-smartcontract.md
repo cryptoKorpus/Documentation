@@ -4,6 +4,8 @@ Test example to test simple iteration with eosjs with bmail smart contract
 
 1 - Compile eosjs lib explained here: https://github.com/EOSIO/eosjs#browser
 
+2 - Change httpEndpoint to a network with a bmail smartcontract deployed by a bmail.code account
+
 2 - Change mynewacct to a test account
 
 ```html
@@ -24,7 +26,7 @@ eosioPublic = 'EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV';
 // Optional configuration..
 config = {
   keyProvider: [eosioPrivate], // WIF string or array of keys..
-  httpEndpoint: 'http://nodeos01.btuga.io',
+  httpEndpoint: 'http://localhost:8888',
   expireInSeconds: 60,
   broadcast: true,
   debug: false,
