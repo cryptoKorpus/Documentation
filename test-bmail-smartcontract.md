@@ -1,15 +1,16 @@
 Test example to test simple iteration with eosjs with bmail smart contract
+1 - Compile eosjs lib explained here: https://github.com/EOSIO/eosjs#browser
+2 - change mynewacct to an the test account
 
+```
 <html>
 <head>
 <script src="eos.js"></script>
-<script src="phaser.min.js"></script>
 </head>
 <body>
 <div>
-    <h2>Tic tac toe dapp</h2>
+    <h2>Simple Bmail dapp</h2>
 </div>
-<div id="tictactoe"></div>
 <script>
 
 // system account keys
@@ -59,3 +60,4 @@ eos.transaction({
 </script>
 </body>
 </html>
+```
