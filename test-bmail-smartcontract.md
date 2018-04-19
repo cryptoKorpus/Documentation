@@ -6,7 +6,7 @@ Test example to test simple iteration with eosjs with bmail smart contract
 
 2 - Change mynewacct to a test account
 
-```
+```html
 <html>
 <head>
 <script src="eos.js"></script>
