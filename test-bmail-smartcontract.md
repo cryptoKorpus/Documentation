@@ -1,8 +1,10 @@
+# Simple bmail dapp
+
 Test example to test simple iteration with eosjs with bmail smart contract
 
 1 - Compile eosjs lib explained here: https://github.com/EOSIO/eosjs#browser
 
-2 - change mynewacct to an the test account
+2 - Change mynewacct to an the test account
 
 ```
 <html>
