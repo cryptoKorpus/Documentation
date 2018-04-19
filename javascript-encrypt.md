@@ -7,33 +7,33 @@ So it WORKS !!
 ```javascript
 function testPrivateMessageSend(text) {
 
-  console.log(text);
+    console.log(text);
 
-  var privateWifAlice = "";
-  var privateWifBob = "";
-  
-  Eos.modules.ecc.PrivateKey.randomKey()
-    .then(privateKey => {
-privateWifAlice = privateKey.toWif(); 
-return Eos.modules.ecc.PrivateKey.randomKey();
-    })
-.then(privateKey => {
-    privateWifBob = privateKey.toWif();
-var publicWifAlice = Eos.modules.ecc.privateToPublic(privateWifAlice);
-var publicWifBob = Eos.modules.ecc.privateToPublic(privateWifBob);
-  
-var encrypted = Eos.modules.ecc.Aes.encrypt(privateWifAlice, publicWifBob, text);
-  
-console.log(encrypted);
-console.log(encrypted.message.toString());
-//send information thru the wire
-// alice reads msg
-var decriptedAlice = Eos.modules.ecc.Aes.decrypt(privateWifAlice, publicWifBob, encrypted.nonce, encrypted.message, encrypted.checksum);
-  
-// bob reads msg
-var decriptedBob = Eos.modules.ecc.Aes.decrypt(privateWifBob, publicWifAlice, encrypted.nonce, encrypted.message, encrypted.checksum);
-console.log("alice decrypt: " + decriptedAlice.toString());
-console.log("bob decrypt: " + decriptedBob.toString());
-});
+    var privateWifAlice = "";
+    var privateWifBob = "";
+
+    Eos.modules.ecc.PrivateKey.randomKey()
+        .then(privateKey => {
+            privateWifAlice = privateKey.toWif();
+            return Eos.modules.ecc.PrivateKey.randomKey();
+        })
+        .then(privateKey => {
+            privateWifBob = privateKey.toWif();
+            var publicWifAlice = Eos.modules.ecc.privateToPublic(privateWifAlice);
+            var publicWifBob = Eos.modules.ecc.privateToPublic(privateWifBob);
+
+            var encrypted = Eos.modules.ecc.Aes.encrypt(privateWifAlice, publicWifBob, text);
+
+            console.log(encrypted);
+            console.log(encrypted.message.toString());
+            //send information thru the wire
+            // alice reads msg
+            var decriptedAlice = Eos.modules.ecc.Aes.decrypt(privateWifAlice, publicWifBob, encrypted.nonce, encrypted.message, encrypted.checksum);
+
+            // bob reads msg
+            var decriptedBob = Eos.modules.ecc.Aes.decrypt(privateWifBob, publicWifAlice, encrypted.nonce, encrypted.message, encrypted.checksum);
+            console.log("alice decrypt: " + decriptedAlice.toString());
+            console.log("bob decrypt: " + decriptedBob.toString());
+        });
 }
 ```
