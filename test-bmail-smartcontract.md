@@ -78,13 +78,13 @@ function sendEmail() {
 	    	  account: "bmail.code",
 	    	  name: "sendmail",
 	    	  authorization: [{
-	    		actor: senderName,
-	    		permission: "active"
+	    	     actor: senderName,
+	    	     permission: "active"
 	    	  }],
 	    	  data: {
-	    		sender: senderName,
-	    		receivers: [receiverName],
-	    		mailhashs: ["QWERTYUIOPASDFGHJKLZXCVBNMDFGHJKLA"]
+	    	     sender: senderName,
+	    	     receivers: [{receiver: receiverName, mailhash: "QWERTYUIOPASDFGHJKLZXCVBNMDFGHJKLA"}],
+	    	     channelid: 0
 	    	  }
 	    	}
 	      ]
@@ -93,27 +93,72 @@ function sendEmail() {
 	}).then(result => {
 	  console.log(result);
 	
-	  //get table rows by sender and receiver
+	  //get table rows by sender dbprefs (last_senderid, last_receiverid)
 	  return eos.getTableRows({
 		json: true,
 		code: "bmail.code",
 		scope: senderName,
-		table: "dbmail",
+		table: "dbprefs",
 		limit: 50
 	  })
 	  
 	}).then(result => {
 	  console.log(result);
+	
+	  //get table rows by sender dbsentmail
+	  return eos.getTableRows({
+		json: true,
+		code: "bmail.code",
+		scope: senderName,
+		table: "dbsentmail",
+		limit: 50
+	  })
 	  
 	}).then(result => {
 	  console.log(result);
 	
-	  //get table rows by sender and receiver
+	  //get table rows by sender dbrecvmail
+	  return eos.getTableRows({
+		json: true,
+		code: "bmail.code",
+		scope: senderName,
+		table: "dbrecvmail",
+		limit: 50
+	  })
+	  
+	}).then(result => {
+	  console.log(result);
+	
+	  //get table rows by receiver dbprefs (last_senderid, last_receiverid)
 	  return eos.getTableRows({
 		json: true,
 		code: "bmail.code",
 		scope: receiverName,
-		table: "dbmail",
+		table: "dbprefs",
+		limit: 50
+	  })
+	  
+	}).then(result => {
+	  console.log(result);
+	
+	  //get table rows by receiver dbsentmail
+	  return eos.getTableRows({
+		json: true,
+		code: "bmail.code",
+		scope: receiverName,
+		table: "dbsentmail",
+		limit: 50
+	  })
+	  
+	}).then(result => {
+	  console.log(result);
+	
+	  //get table rows by receiver dbrecvmail
+	  return eos.getTableRows({
+		json: true,
+		code: "bmail.code",
+		scope: receiverName,
+		table: "dbrecvmail",
 		limit: 50
 	  })
 	  
