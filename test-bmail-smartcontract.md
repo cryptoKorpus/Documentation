@@ -39,7 +39,7 @@ function sendEmail() {
 	// Optional configuration..
 	config = {
 	  keyProvider: [eosioPrivate], // WIF string or array of keys..
-	  httpEndpoint: "http://nodeos01.btuga.io",
+	  httpEndpoint: "http://localhost:8888",
 	  expireInSeconds: 60,
 	  broadcast: true,
 	  debug: false,
