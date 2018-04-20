@@ -29,7 +29,7 @@ Test example to test simple iteration with eosjs with bmail smart contract
 <script>
 
 function sendEmail() {
-    var senderName = document.getElementsByName("sender")[0].value;
+        var senderName = document.getElementsByName("sender")[0].value;
 	var receiverName = document.getElementsByName("receiver")[0].value;
 
 	// system account keys
