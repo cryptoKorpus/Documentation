@@ -8,6 +8,8 @@ Test example to test simple iteration with eosjs with bmail smart contract
 
 3 - Insert sender and receiver and send mail(To send again comment account creation)
 
+4 - Use channelid to create a maillist/group or a Conversation
+
 ```html
 <html>
 <head>
