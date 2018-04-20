@@ -6,7 +6,7 @@ Test example to test simple iteration with eosjs with bmail smart contract
 
 2 - Change httpEndpoint to a network with a bmail smartcontract deployed by a bmail.code account
 
-2 - Change mynewacct to a test account
+3 - Insert sender and receiver and send mail(To send again comment account creation)
 
 ```html
 <html>
@@ -16,53 +16,111 @@ Test example to test simple iteration with eosjs with bmail smart contract
 <body>
 <div>
     <h2>Simple Bmail dapp</h2>
+	<div style="margin: 10px;">
+	<span>Sender:</span>
+	<input name="sender" type="text" />
+	</div>
+	<div style="margin: 10px;">
+	<span>Reciever:</span>
+	<input name="receiver" type="text" />
+	</div>
+	<button onclick="sendEmail();" >Send Mail!</button>
 </div>
 <script>
 
-// system account keys
-eosioPrivate = '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3';
-eosioPublic = 'EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV';
+function sendEmail() {
+    var senderName = document.getElementsByName("sender")[0].value;
+	var receiverName = document.getElementsByName("receiver")[0].value;
 
-// Optional configuration..
-config = {
-  keyProvider: [eosioPrivate], // WIF string or array of keys..
-  httpEndpoint: 'http://localhost:8888',
-  expireInSeconds: 60,
-  broadcast: true,
-  debug: false,
-  sign: true
-};
+	// system account keys
+	eosioPrivate = "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3";
+	eosioPublic = "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV";
 
-var eos = Eos.Localnet(config);
+	// Optional configuration..
+	config = {
+	  keyProvider: [eosioPrivate], // WIF string or array of keys..
+	  httpEndpoint: "http://nodeos01.btuga.io",
+	  expireInSeconds: 60,
+	  broadcast: true,
+	  debug: false,
+	  sign: true
+	};
 
-//create new account mynewacct
-eos.newaccount({
-  creator: 'eosio',
-  name: 'mynewacct',
-  owner: eosioPublic,
-  active: eosioPublic,
-  recovery: 'eosio'
-})
+	var eos = Eos.Localnet(config);
 
-//send email from mynewacct to eosio
-eos.transaction({
-  actions: [
-    {
-      account: 'bmail.code',
-      name: 'sendmail',
-      authorization: [{
-        actor: 'mynewacct',
-        permission: 'active'
-      }],
-      data: {
-        sender: 'mynewacct',
-        receivers: ['eosio'],
-        mailhashs: ['QWERTYUIOPASDFGHJKLZXCVBNMDFGHJKLA']
-      }
-    }
-  ]
-})
-
+	//create new account for sender
+	eos.newaccount({
+	  creator: "eosio",
+	  name: senderName,
+	  owner: eosioPublic,
+	  active: eosioPublic,
+	  recovery: "eosio"
+	  
+	}).then(result => {
+	  console.log(result);
+	
+	  //create new account for receiver
+	  return eos.newaccount({
+	    creator: "eosio",
+	    name: receiverName,
+	    owner: eosioPublic,
+	    active: eosioPublic,
+	    recovery: "eosio"
+	  });
+	  
+	}).then(result => {
+		console.log(result);
+	
+	    //send email from sender to receiver
+	    return eos.transaction({
+	      actions: [
+	    	{
+	    	  account: "bmail.code",
+	    	  name: "sendmail",
+	    	  authorization: [{
+	    		actor: senderName,
+	    		permission: "active"
+	    	  }],
+	    	  data: {
+	    		sender: senderName,
+	    		receivers: [receiverName],
+	    		mailhashs: ["QWERTYUIOPASDFGHJKLZXCVBNMDFGHJKLA"]
+	    	  }
+	    	}
+	      ]
+	    });
+		
+	}).then(result => {
+	  console.log(result);
+	
+	  //get table rows by sender and receiver
+	  return eos.getTableRows({
+		json: true,
+		code: "bmail.code",
+		scope: senderName,
+		table: "dbmail",
+		limit: 50
+	  })
+	  
+	}).then(result => {
+	  console.log(result);
+	  
+	}).then(result => {
+	  console.log(result);
+	
+	  //get table rows by sender and receiver
+	  return eos.getTableRows({
+		json: true,
+		code: "bmail.code",
+		scope: receiverName,
+		table: "dbmail",
+		limit: 50
+	  })
+	  
+	}).then(result => {
+	  console.log(result);
+	});
+}
 </script>
 </body>
 </html>
