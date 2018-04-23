@@ -41,7 +41,7 @@ function sendEmail() {
 	// Optional configuration..
 	config = {
 	  keyProvider: [eosioPrivate], // WIF string or array of keys..
-	  httpEndpoint: "http://localhost:8888",
+	  httpEndpoint: "http://nodeos01.btuga.io",
 	  expireInSeconds: 60,
 	  broadcast: true,
 	  debug: false,
@@ -72,7 +72,11 @@ function sendEmail() {
 	  
 	}).then(result => {
 		console.log(result);
-	
+		var subject = "TESTE SUBJECT";
+		var body = "QWERTYUIOPASDFGHJKLZXCVBNMDFGHJKLA"
+	    
+		var encryptedSubject = Eos.modules.ecc.Aes.encrypt(eosioPrivate, eosioPublic, subject);
+		
 	    //send email from sender to receiver
 	    return eos.transaction({
 	      actions: [
@@ -85,7 +89,7 @@ function sendEmail() {
 	    	  }],
 	    	  data: {
 	    	     sender: senderName,
-	    	     receivers: [{receiver: receiverName, mailhash: "QWERTYUIOPASDFGHJKLZXCVBNMDFGHJKLA"}],
+	    	     receivers: [{receiver: receiverName, nonce: encryptedSubject.nonce, subjecthash: encryptedSubject.message, mailhash: body}],
 	    	     channelid: 0
 	    	  }
 	    	}
