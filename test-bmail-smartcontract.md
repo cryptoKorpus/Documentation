@@ -58,6 +58,10 @@ Public key: EOS8it2vRbAxRLJLFqZqNVXfVKa2pFJ8v9wi5D2i7AdCN48HcjDoh
 	
 <div id="sendmailform">	
 	<div style="margin: 10px;">
+		<button onclick="logout();" >logout</button>
+	</div>
+
+	<div style="margin: 10px;">
 		<span>Sender:</span>
 		<span id="sender"></span>
 	</div>
@@ -75,7 +79,7 @@ Public key: EOS8it2vRbAxRLJLFqZqNVXfVKa2pFJ8v9wi5D2i7AdCN48HcjDoh
 		TODO not working yet!
 		</textarea>
 	</div>
-	
+
 	<button onclick="sendEmail();" >Send Mail!</button>
 </div>
 	
@@ -84,28 +88,65 @@ Public key: EOS8it2vRbAxRLJLFqZqNVXfVKa2pFJ8v9wi5D2i7AdCN48HcjDoh
 	
 </div>
 <script>
+var sessionTimeout = 30;
+
 function loadappstatus() {
-	if(window.accountName !== undefined) {
+	var account = JSON.parse(localStorage.getItem("bmail_account"));
+	var loggedin = false;
+	
+	if(account !== null) {
+		var diffMs = new Date() - new Date(account.expireDate);
+		var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+		if(diffMins < sessionTimeout) {
+			loggedin = true;
+			
+		}
+		else {
+			localStorage.removeItem("bmail_account");
+			document.getElementById("status").innerHTML = "Account expired!";
+		}
+	}
+	
+	if(loggedin) {
 		document.getElementById('loginform').style.display = 'none';
 		document.getElementById('sendmailform').style.display = 'block';
 		
 		document.getElementById("status").innerHTML = "";
-		document.getElementById("sender").innerHTML = accountName;
+		document.getElementById("sender").innerHTML = account.name;
 		document.getElementsByName("accountname")[0].value = "";
 	    document.getElementsByName("privatekey")[0].value = "";
+		
+		mykeystore = kos.Keystore(account.name, {
+			timeoutInMin: sessionTimeout,
+			uriRules: {   //TODO: review permissions/rules
+			  'active': '.*',
+			  'active/**': '.*'
+			},
+		});
+		
+		eos = Eos.Localnet({
+		  keyProvider: mykeystore.keyProvider,
+		  httpEndpoint: "http://localhost:8888",
+		  expireInSeconds: 60,
+		  broadcast: true,
+		  debug: false,
+		  sign: true
+		});
 	}
 	else {
 		document.getElementById('loginform').style.display = 'block';
 		document.getElementById('sendmailform').style.display = 'none';
-	}	
+	}
+	
 }
 
 function login() {
-	accountName = document.getElementsByName("accountname")[0].value;
+	var accountName = document.getElementsByName("accountname")[0].value;
 	var privateKey = document.getElementsByName("privatekey")[0].value;
 
 	mykeystore = kos.Keystore(accountName, {
-		timeoutInMin: 30,
+		timeoutInMin: sessionTimeout,
 		uriRules: {   //TODO: review permissions/rules
 		  'active': '.*',
 		  'active/**': '.*'
@@ -124,8 +165,15 @@ function login() {
 	eos.getAccount(accountName).then(account => {
       mykeystore.deriveKeys({
         parent: privateKey,
-        accountPermissions: account.permissions
+        accountPermissions: account.permissions,
+		saveKeyMatches: ["active"]
       });
+	  
+	  localStorage.setItem("bmail_account", JSON.stringify({
+	    name: accountName,
+		expireDate: new Date()
+	  }));
+	  
 	  loadappstatus();
     }).catch(error => {
 	  console.log(error);
@@ -133,31 +181,57 @@ function login() {
 	});
 }
 
+function logout() {
+	mykeystore.logout();
+	localStorage.removeItem("bmail_account");
+	loadappstatus();
+	document.getElementById("status").innerHTML = "logout!";
+}
+
 function sendEmail() {
+    var account = JSON.parse(localStorage.getItem("bmail_account"));
+	var accountName = account.name;
 	var receiverName = document.getElementsByName("receiver")[0].value;
 	var subject = document.getElementsByName("mailsubject")[0].value;
     var body = "QWERTYUIOPASDFGHJKLZXCVBNMDFGHJKLA"; //TODO ipfs hash for now
 	
-	var encryptedSubject = Eos.modules.ecc.Aes.encrypt(mykeystore.getPrivateKey('active'), mykeystore.getPublicKey('active'), subject);
-	
-	//send email from sender to receiver
-	eos.transaction({
-	  actions: [
-		{
-		  account: "bmail.code",
-		  name: "sendmail",
-		  authorization: [{
-			 actor: accountName,
-			 permission: "active"
-		  }],
-		  data: {
-			 sender: accountName,
-			 receivers: [{receiver: receiverName, nonce: encryptedSubject.nonce, subjecthash: encryptedSubject.message, mailhash: body}],
-			 channelid: 0
-		  }
+	//find receiver account and active pubkey
+	eos.getAccount(receiverName).then(account => {
+      var receiverPubKey = null;
+	  //get receiver active pubkey
+	  for(var i = 0; i < account.permissions.length; i++) {
+		if(account.permissions[i].perm_name == "active") {
+			//TODO so far active authority must have atleast 1 key. Create later a authority with a specific mail key
+			receiverPubKey = account.permissions[i].required_auth.keys[0].key;
+			break;
 		}
-	  ]
-	}).then(result => {
+	  }
+
+	  var encryptedSubject = Eos.modules.ecc.Aes.encrypt(mykeystore.getPrivateKey('active'), receiverPubKey, subject);
+	  
+	  //send email from sender to receiver
+	  return eos.transaction({
+		  actions: [
+			{
+			  account: "bmail.code",
+			  name: "sendmail",
+			  authorization: [{
+				 actor: accountName,
+				 permission: "active"
+			  }],
+			  data: {
+				 sender: accountName,
+				 receivers: [{receiver: receiverName, nonce: encryptedSubject.nonce, subjecthash: encryptedSubject.message, mailhash: body}],
+				 channelid: 0
+			  }
+			}
+		  ]
+		});	  
+    }).catch(error => {
+	  console.log(error);
+	  document.getElementById("status").innerHTML = "receiver account does not exist!";
+	})
+	.then(result => {
 	  console.log(result);
 	
 	  //get table rows by sender dbprefs (last_senderid, last_receiverid)
