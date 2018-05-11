@@ -79,7 +79,7 @@ function testStoreKeys()
   /*
     var config = {
       keyProvider: mykeystore.keyProvider,
-      httpEndpoint: "http://nodeos01.btuga.io",
+      httpEndpoint: "http://localhost:xxxx",
       expireInSeconds: 60,
       broadcast: true,
       debug: false,
