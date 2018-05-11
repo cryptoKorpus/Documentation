@@ -13,21 +13,25 @@ Test example for simple iteration with eosjs with bmail smart contract
 tester1
 
 Private key: 5K57oSZLpfzePvQNpsLS6NfKXLhhRARNU13q6u2ZPQCGHgKLbTA
+
 Public key: EOS8Q8CJqwnSsV4A6HDBEqmQCqpQcBnhGME1RUvydDRnswNngpqfr
 
 tester2
 
 Private key: 5JcvzJQ2i9u3e64W5mjCzXCBEr2KEhi8Gmt7Qc298HfHD6Y4knK
+
 Public key: EOS5TTSE33xyEZxfkBkNVVtNJecrw7wrq1GCRNXvm9AFzs96WRSev
 
 tester3
 
 Private key: 5J3dhow2RqqXccKqqAMADuJ3St6SmzisA8Edz3FrRteXiXR2yy1
+
 Public key: EOS6Tu4bYV7fJnLxpwroVvNqdxw3ZKCqA7NWNkpiiQu6LAQgVx9fb
 
 tester4
 
 Private key: 5KX2dZz58kQnqjMbzPcBcJbmEUxnQv4A6WcLr9YiU2ZhMYkFDtN
+
 Public key: EOS8it2vRbAxRLJLFqZqNVXfVKa2pFJ8v9wi5D2i7AdCN48HcjDoh
 
 5 - Insert receiver, subject, body and send mail
